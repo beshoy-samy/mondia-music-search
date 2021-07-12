@@ -2,6 +2,7 @@ package com.bsamy.musix.model
 
 import android.util.Log
 import com.bsamy.musix.BuildConfig
+import com.bsamy.musix.R
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -22,9 +23,9 @@ interface Network {
     ): T
 }
 
-internal class NetworkImp(private val gson: Gson = gsonSerializer) : Network {
+private const val TAG = "Network"
 
-    private val TAG = "NetworkImp"
+internal class NetworkImp(private val gson: Gson = gsonSerializer) : Network {
 
     override fun <T> fetch(
         url: String,
@@ -91,24 +92,28 @@ enum class RequestType(val key: String) {
 }
 
 fun HttpURLConnection.stringResponse(): String {
-    val TAG = "Network Parsing"
     val response = StringBuffer()
     try {
-        inputStream.bufferedReader().use {
-            val lines = it.readLines()
-            lines.forEach { line -> response.append(line) }
-            Log.d(TAG, "$response")
+        inputStream.bufferedReader().forEachLine {
+            Log.i(TAG, "parsing: $it")
+            response.append(it)
         }
     } catch (throwable: Throwable) {
-        Log.e(TAG, throwable.message.toString())
-        Log.e(TAG, "", throwable)
+        Log.e(TAG, "parsing", throwable)
     } finally {
         inputStream.close()
     }
     return response.toString()
 }
 
-data class NetworkException(private val code: Int, val response: String) : Exception() {
+data class NetworkException(val code: Int, val response: String) : Exception() {
 
-    fun isAuthentication() = code == HttpURLConnection.HTTP_UNAUTHORIZED
+    fun getErrorMessage() =
+        when (code) {
+            HttpURLConnection.HTTP_INTERNAL_ERROR -> R.string.internal_error_msg
+            HttpURLConnection.HTTP_UNAUTHORIZED -> R.string.authenticate_first
+            HttpURLConnection.HTTP_NOT_FOUND, HttpURLConnection.HTTP_NO_CONTENT ->
+                R.string.not_found_error
+            else -> R.string.unknown_error
+        }
 }

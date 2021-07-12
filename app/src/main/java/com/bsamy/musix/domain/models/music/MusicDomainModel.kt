@@ -7,7 +7,7 @@ data class MusicDomainModel(
     val releaseTitle: String,
     val artist: ArtistDomainModel,
     val additionalArtists: List<ArtistDomainModel>,
-    val type: String,
+    val type: MusicType,
     val publishingDate: String,
     val volumeNumber: Int,
     val trackNumber: Int,

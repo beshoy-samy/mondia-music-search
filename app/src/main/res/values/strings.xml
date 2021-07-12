@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Musix</string>
+
+    <string name="unknown_error">An error has occurred</string>
+    <string name="network_error">Network not found</string>
+    <string name="internal_error_msg">Sorry, service is down right now</string>
+    <string name="authenticate_first">Please, authenticate first</string>
+    <string name="not_found_error">Sorry, we couldn\'t find any matches</string>
+    <string name="search_hint">search for musics</string>
 </resources>

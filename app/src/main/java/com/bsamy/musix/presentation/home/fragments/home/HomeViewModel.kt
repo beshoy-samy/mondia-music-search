@@ -10,10 +10,12 @@ import com.bsamy.musix.domain.usecases.music.MusicSearchUseCase
 import com.bsamy.musix.domain.usecases.music.musicSearchUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
+@FlowPreview
 class HomeViewModel(
     private val musicUseCase: MusicSearchUseCase = musicSearchUseCase,
     private val authenticatorUseCase: AuthenticationUseCase = authenticationUseCase,
@@ -25,14 +27,33 @@ class HomeViewModel(
     val musicSearchResult: StateFlow<ResultModel<List<MusicDomainModel>>>
         get() = _musicSearchResult
 
+    private val searchQueriesChannel = Channel<String>()
+
+    init {
+        viewModelScope.launch(coroutineContext) {
+            searchQueriesChannel.receiveAsFlow()
+                .filter { it.isNotEmpty() }
+                .debounce(1000)
+                .collect { searchForMusic(it) }
+        }
+    }
+
     @FlowPreview
-    fun fetch(query: String) {
+    private fun searchForMusic(query: String) {
         viewModelScope.launch(coroutineContext) {
             authenticatorUseCase.authenticate()
                 .onStart { _musicSearchResult.emit(ResultModel.Progress) }
                 .flatMapMerge { token -> musicUseCase.searchForMusic(query, token) }
                 .catch { _musicSearchResult.emit(ResultModel.ErrorResult(it)) }
                 .collect { _musicSearchResult.emit(ResultModel.SuccessResult(it)) }
+        }
+    }
+
+    fun userSearch(query: String?) {
+        query?.let {
+            viewModelScope.launch(coroutineContext) {
+                searchQueriesChannel.send(it)
+            }
         }
     }
 }
