@@ -5,6 +5,7 @@ import com.bsamy.musix.BuildConfig
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import java.lang.reflect.Type
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -16,8 +17,8 @@ interface Network {
         url: String,
         requestType: RequestType,
         headers: Map<String, String>? = null,
-        queries: Map<String, String>? = null,
-        returnType: Class<T>
+        queries: Map<String, Any>? = null,
+        returnType: Type
     ): T
 }
 
@@ -29,39 +30,42 @@ internal class NetworkImp(private val gson: Gson = gsonSerializer) : Network {
         url: String,
         requestType: RequestType,
         headers: Map<String, String>?,
-        queries: Map<String, String>?,
-        returnType: Class<T>
+        queries: Map<String, Any>?,
+        returnType: Type
     ): T {
         val builtQueries = buildRequestQueries(queries)
         val requestUrl = "${BuildConfig.BASE_URL}$url$builtQueries"
 
         val connection = URL(requestUrl).openConnection() as HttpURLConnection
         connection.requestMethod = requestType.key
-        connection.setChunkedStreamingMode(0)
         connection.setRequestProperty("Accept", "application/json")
         connection.setRequestProperty("Accept-Encoding", "identity")
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
         connection.setRequestProperty("Connection", "close")
         headers?.keys?.forEach { key -> connection.setRequestProperty(key, headers[key]) }
 
+        Log.i(TAG, "headers: $headers")
+        Log.i(TAG, "queries: $queries")
+
         connection.connectTimeout = Int.MAX_VALUE
         connection.readTimeout = Int.MAX_VALUE
         connection.connect()
-        val responseCode = connection.responseCode
-        val response = connection.stringResponse()
-        when (responseCode) {
+        val responseMessage = connection.responseMessage
+        Log.i(TAG, "request $requestUrl messages that $responseMessage")
+        when (val responseCode = connection.responseCode) {
             HttpURLConnection.HTTP_OK -> {
+                val response = connection.stringResponse()
                 connection.disconnect()
-                return gson.fromJson(response, returnType)
+                return gson.fromJson(response, returnType) as T
             }
             else -> {
                 connection.disconnect()
-                throw NetworkException(responseCode, response)
+                throw NetworkException(responseCode, responseMessage)
             }
         }
     }
 
-    private fun buildRequestQueries(queries: Map<String, String>?) =
+    private fun buildRequestQueries(queries: Map<String, Any>?) =
         queries?.keys?.let { keys ->
             val lastIndex = keys.size.minus(1)
             var result = "?"
@@ -87,20 +91,24 @@ enum class RequestType(val key: String) {
 }
 
 fun HttpURLConnection.stringResponse(): String {
+    val TAG = "Network Parsing"
     val response = StringBuffer()
     try {
         inputStream.bufferedReader().use {
             val lines = it.readLines()
             lines.forEach { line -> response.append(line) }
-            Log.d("Network Parsing lines", "$response")
+            Log.d(TAG, "$response")
         }
     } catch (throwable: Throwable) {
-        Log.e("Network Parsing", throwable.message.toString())
-        Log.e("Network Parsing", "", throwable)
+        Log.e(TAG, throwable.message.toString())
+        Log.e(TAG, "", throwable)
     } finally {
         inputStream.close()
     }
     return response.toString()
 }
 
-data class NetworkException(private val code: Int, val response: String) : Exception()
+data class NetworkException(private val code: Int, val response: String) : Exception() {
+
+    fun isAuthentication() = code == HttpURLConnection.HTTP_UNAUTHORIZED
+}

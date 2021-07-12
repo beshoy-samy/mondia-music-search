@@ -9,5 +9,5 @@ data class StatisticsDto(
     @SerializedName("estimatedTotalCount")
     val estimatedTotalCount: Int?,
     @SerializedName("popularity")
-    val popularity: Int?
+    val popularity: Float?
 )
