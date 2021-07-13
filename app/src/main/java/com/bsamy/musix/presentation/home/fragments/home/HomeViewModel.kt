@@ -10,7 +10,6 @@ import com.bsamy.musix.domain.usecases.music.MusicSearchUseCase
 import com.bsamy.musix.domain.usecases.music.musicSearchUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
@@ -27,11 +26,11 @@ class HomeViewModel(
     val musicSearchResult: StateFlow<ResultModel<List<MusicDomainModel>>>
         get() = _musicSearchResult
 
-    private val searchQueriesChannel = Channel<String>()
+    private val searchQueriesFlow = MutableStateFlow("")
 
     init {
         viewModelScope.launch(coroutineContext) {
-            searchQueriesChannel.receiveAsFlow()
+            searchQueriesFlow
                 .filter { it.isNotEmpty() }
                 .debounce(1000)
                 .collect { searchForMusic(it) }
@@ -52,7 +51,7 @@ class HomeViewModel(
     fun userSearch(query: String?) {
         query?.let {
             viewModelScope.launch(coroutineContext) {
-                searchQueriesChannel.send(it)
+                searchQueriesFlow.emit(it)
             }
         }
     }

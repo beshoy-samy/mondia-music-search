@@ -9,15 +9,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.bsamy.musix.R
 import com.bsamy.musix.base.BaseFragment
 import com.bsamy.musix.base.ResultModel
 import com.bsamy.musix.base.getErrorMessage
 import com.bsamy.musix.databinding.FragmentHomeBinding
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@FlowPreview
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
 
     override val viewBinder: (LayoutInflater, ViewGroup?, Boolean) -> FragmentHomeBinding =
@@ -29,8 +32,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>() {
     }
 
     private fun listenForInputs() {
-        binding.musicListRecycler.onMusicItemClickedListener = { model, position ->
-            showMessage("item clicked at $position")
+        binding.musicListRecycler.onMusicItemClickedListener = { model, _ ->
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToMusicDetailsFragment(model)
+            )
         }
 
         binding.searchEt.doOnTextChanged { text, _, _, _ ->

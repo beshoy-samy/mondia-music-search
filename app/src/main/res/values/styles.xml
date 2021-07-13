@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="normal_rounded_corners_shape_appearance">
-        <item name="cornerSize">@dimen/radius_normal</item>
+    <style name="high_rounded_corners_shape_appearance">
+        <item name="cornerSize">@dimen/radius_extra_extra</item>
         <item name="cornerFamily">rounded</item>
     </style>
 

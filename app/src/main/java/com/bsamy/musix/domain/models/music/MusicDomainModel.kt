@@ -1,8 +1,13 @@
 package com.bsamy.musix.domain.models.music
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class MusicDomainModel(
     val id: Int,
-    val cover: String?,
+    val smallCover: String?,
+    val bigCover: String?,
     val title: String,
     val releaseTitle: String,
     val artist: ArtistDomainModel,
@@ -15,4 +20,4 @@ data class MusicDomainModel(
     val genres: List<String>,
     val statistics: StatisticsDomainModel,
     val metaData: MetaDataDomainModel
-)
+) : Parcelable

@@ -8,5 +8,18 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.bsamy.musix.presentation.home.fragments.home.HomeFragment"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_musicDetailsFragment"
+            app:destination="@id/musicDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/musicDetailsFragment"
+        android:name="com.bsamy.musix.presentation.home.fragments.details.MusicDetailsFragment"
+        tools:layout="@layout/fragment_music_details">
+        <argument
+            android:name="music"
+            app:argType="com.bsamy.musix.domain.models.music.MusicDomainModel" />
+    </fragment>
 </navigation>

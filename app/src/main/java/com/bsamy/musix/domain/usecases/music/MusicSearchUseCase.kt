@@ -34,6 +34,7 @@ private fun List<MusicDto>.mapToDomainModel() =
         MusicDomainModel(
             musicDto.id.orNotFound(),
             musicDto.cover?.small?.let { "http:$it" },
+            musicDto.cover?.large?.let { "http:$it" },
             musicDto.title.orEmpty(),
             musicDto.release?.title.orEmpty(),
             musicDto.artist.mapToDomainModel(),

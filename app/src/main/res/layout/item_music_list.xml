@@ -22,6 +22,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearance="@style/medium_rounded_corners_shape_appearance"
+            app:srcCompat="@drawable/ic_image_placeholder"
             tools:src="@tools:sample/avatars" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -63,6 +64,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:layout_marginRight="@dimen/margin_small"
                 app:layout_constraintEnd_toStartOf="@id/type_tv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/artist_tv"
