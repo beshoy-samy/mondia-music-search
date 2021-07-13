@@ -7,8 +7,8 @@ import com.bsamy.musix.model.repos.music.MusicRepository
 import com.bsamy.musix.model.repos.music.musicRepository
 import com.bsamy.musix.utils.orNotFound
 import com.bsamy.musix.utils.parseToDate
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 
 val musicSearchUseCase: MusicSearchUseCase by lazy { MusicSearchUseCaseImp() }
 
@@ -16,17 +16,26 @@ interface MusicSearchUseCase {
 
     suspend fun searchForMusic(query: String, token: String): Flow<List<MusicDomainModel>>
 
+    suspend fun validate(query: String): Boolean
+
 }
+
 
 private class MusicSearchUseCaseImp(private val musicRepo: MusicRepository = musicRepository) :
     MusicSearchUseCase {
 
+    @FlowPreview
     override suspend fun searchForMusic(query: String, token: String) =
-        musicRepo.searchForMusic(query, userToken = token)
-            .map {
-                it.mapToDomainModel().filter { item -> item.type != MusicType.ARTIST }
+        flow { emit(query) }
+            .filter { validate(it) }
+            .flatMapMerge { validQuery ->
+                musicRepo.searchForMusic(validQuery, userToken = token)
+                    .map {
+                        it.mapToDomainModel().filter { item -> item.type != MusicType.ARTIST }
+                    }
             }
 
+    override suspend fun validate(query: String) = query.isNotEmpty() && query.length > 1
 }
 
 private fun List<MusicDto>.mapToDomainModel() =

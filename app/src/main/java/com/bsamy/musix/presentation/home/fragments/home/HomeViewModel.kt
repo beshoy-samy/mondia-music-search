@@ -31,7 +31,7 @@ class HomeViewModel(
     init {
         viewModelScope.launch(coroutineContext) {
             searchQueriesFlow
-                .filter { it.isNotEmpty() }
+                .filter { musicUseCase.validate(it) }
                 .debounce(1000)
                 .collect { searchForMusic(it) }
         }

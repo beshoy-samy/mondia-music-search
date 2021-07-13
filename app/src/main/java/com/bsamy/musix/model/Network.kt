@@ -39,11 +39,9 @@ internal class NetworkImp(private val gson: Gson = gsonSerializer) : Network {
 
         val connection = URL(requestUrl).openConnection() as HttpURLConnection
         connection.requestMethod = requestType.key
-        connection.setRequestProperty("Accept", "application/json")
-        connection.setRequestProperty("Accept-Encoding", "identity")
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
-        connection.setRequestProperty("Connection", "close")
+
         headers?.keys?.forEach { key -> connection.setRequestProperty(key, headers[key]) }
+        connection.setRequestProperty("Accept", "application/json")
 
         Log.i(TAG, "headers: $headers")
         Log.i(TAG, "queries: $queries")
@@ -55,7 +53,7 @@ internal class NetworkImp(private val gson: Gson = gsonSerializer) : Network {
         Log.i(TAG, "request $requestUrl messages that $responseMessage")
         when (val responseCode = connection.responseCode) {
             HttpURLConnection.HTTP_OK -> {
-                val response = connection.stringResponse()
+                val response = connection.readResponse()
                 connection.disconnect()
                 return gson.fromJson(response, returnType) as T
             }
@@ -91,19 +89,15 @@ enum class RequestType(val key: String) {
     POST("POST")
 }
 
-fun HttpURLConnection.stringResponse(): String {
-    val response = StringBuffer()
+fun HttpURLConnection.readResponse(): String {
+    var response = ""
     try {
-        inputStream.bufferedReader().forEachLine {
-            Log.i(TAG, "parsing: $it")
-            response.append(it)
-        }
+        response = inputStream.bufferedReader().readText()
+        Log.i(TAG, "parsing: $response")
     } catch (throwable: Throwable) {
         Log.e(TAG, "parsing", throwable)
-    } finally {
-        inputStream.close()
     }
-    return response.toString()
+    return response
 }
 
 data class NetworkException(val code: Int, val response: String) : Exception() {
