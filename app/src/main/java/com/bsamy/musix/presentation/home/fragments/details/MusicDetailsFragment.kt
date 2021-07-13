@@ -31,6 +31,7 @@ class MusicDetailsFragment : BaseEmptyFragment<FragmentMusicDetailsBinding>() {
     private fun bindMusicItem(musicItem: MusicDomainModel) {
         binding.toolbar.title = musicItem.type.key
         musicItem.bigCover?.let { binding.coverIv.loadImage(url = it) }
+        binding.generesTv.text = musicItem.genres.toString()
         binding.titleTv.text = musicItem.title
         binding.artistTv.text = musicItem.artist.name
         binding.dateTv.text = musicItem.publishingDate
