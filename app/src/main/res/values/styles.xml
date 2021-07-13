@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="high_rounded_corners_shape_appearance">
+        <item name="cornerSize">@dimen/radius_extra_extra</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+
+    <style name="medium_rounded_corners_shape_appearance">
+        <item name="cornerSize">@dimen/radius_medium</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+
+    <style name="NormalTitleStyle">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_normal</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SecondaryTitleStyle">
+        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:textSize">@dimen/text_small</item>
+    </style>
+
+    <style name="BigTitleStyle">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_extra</item>
+    </style>
+
+    <style name="MusixStyleTitle">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/text_normal</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense">
+        <item name="endIconTint">@color/colorPrimary</item>
+        <item name="startIconTint">@color/colorPrimary</item>
+        <item name="hintEnabled">false</item>
+        <item name="android:textColorHint">@color/secondary_text</item>
+        <item name="hintTextColor">@color/secondary_text</item>
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="errorEnabled">false</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="android:textSize">@dimen/text_normal</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="boxCornerRadiusBottomEnd">0dp</item>
+        <item name="boxCornerRadiusBottomStart">0dp</item>
+        <item name="boxCornerRadiusTopEnd">0dp</item>
+        <item name="boxCornerRadiusTopStart">0dp</item>
+    </style>
+
+    <style name="TextInputStyle.TextInputEditText">
+        <item name="android:paddingTop">@dimen/padding_normal</item>
+        <item name="android:paddingBottom">@dimen/padding_normal</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:textColor">@color/secondary_text</item>
+    </style>
+
+</resources>
