@@ -20,8 +20,7 @@ interface MusicSearchUseCase {
 
 }
 
-
-private class MusicSearchUseCaseImp(private val musicRepo: MusicRepository = musicRepository) :
+class MusicSearchUseCaseImp(private val musicRepo: MusicRepository = musicRepository) :
     MusicSearchUseCase {
 
     @FlowPreview

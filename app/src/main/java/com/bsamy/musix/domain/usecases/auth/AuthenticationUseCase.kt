@@ -12,7 +12,7 @@ interface AuthenticationUseCase {
     suspend fun authenticate(): Flow<String>
 }
 
-private class AuthenticationUseCaseImp(private val authenticationRepo: AuthenticationRepository = authenticationRepository) :
+class AuthenticationUseCaseImp(private val authenticationRepo: AuthenticationRepository = authenticationRepository) :
     AuthenticationUseCase {
 
     override suspend fun authenticate() =

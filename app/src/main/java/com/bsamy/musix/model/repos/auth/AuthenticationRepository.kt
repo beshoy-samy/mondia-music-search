@@ -15,7 +15,7 @@ interface AuthenticationRepository {
     suspend fun refreshToken(): Flow<AuthenticationDto>
 }
 
-private class AuthenticationRepositoryImp(private val networkConnection: Network = network) :
+class AuthenticationRepositoryImp(private val networkConnection: Network = network) :
     AuthenticationRepository {
 
     override suspend fun refreshToken(): Flow<AuthenticationDto> =

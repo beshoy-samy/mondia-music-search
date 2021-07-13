@@ -5,37 +5,37 @@ import com.google.gson.annotations.SerializedName
 
 data class MusicDto(
     @SerializedName("additionalArtists")
-    val additionalArtists: List<ArtistDto>?,
+    val additionalArtists: List<ArtistDto>? = null,
     @SerializedName("adfunded")
-    val adfunded: Boolean?,
+    val adfunded: Boolean? = null,
     @SerializedName("bundleOnly")
-    val bundleOnly: Boolean?,
+    val bundleOnly: Boolean? = null,
     @SerializedName("cover")
-    val cover: CoverDto?,
+    val cover: CoverDto? = null,
     @SerializedName("duration")
-    val duration: Int?,
+    val duration: Int? = null,
     @SerializedName("extendedMetaData")
-    val extendedMetaData: ExtendedMetaDataDto?,
+    val extendedMetaData: ExtendedMetaDataDto? = null,
     @SerializedName("genres")
-    val genres: List<String>?,
+    val genres: List<String>? = null,
     @SerializedName("id")
-    val id: Int?,
+    val id: Int? = null,
     @SerializedName("mainArtist")
-    val artist: ArtistDto?,
+    val artist: ArtistDto? = null,
     @SerializedName("publishingDate")
-    val publishingDate: String?,
+    val publishingDate: String? = null,
     @SerializedName("release")
-    val release: ReleaseDto?,
+    val release: ReleaseDto? = null,
     @SerializedName("statistics")
-    val statistics: StatisticsDto?,
+    val statistics: StatisticsDto? = null,
     @SerializedName("streamable")
-    val streamable: Boolean?,
+    val streamable: Boolean? = null,
     @SerializedName("title")
-    val title: String?,
+    val title: String? = null,
     @SerializedName("trackNumber")
-    val trackNumber: Int?,
+    val trackNumber: Int? = null,
     @SerializedName("type")
-    val type: String?,
+    val type: String? = null,
     @SerializedName("volumeNumber")
-    val volumeNumber: Int?
+    val volumeNumber: Int? = null
 )

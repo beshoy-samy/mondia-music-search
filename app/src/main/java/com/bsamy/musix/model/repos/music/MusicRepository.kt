@@ -19,7 +19,7 @@ interface MusicRepository {
     ): Flow<List<MusicDto>>
 }
 
-private class MusicRepositoryImp(private val networkConnection: Network = network) :
+class MusicRepositoryImp(private val networkConnection: Network = network) :
     MusicRepository {
 
     override suspend fun searchForMusic(
